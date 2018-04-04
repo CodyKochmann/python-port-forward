@@ -18,12 +18,15 @@
 
 import socket
 import sys
-import thread
 import time
+try:
+    import thread
+except ImportError:
+    import _thread as thread
 
 def main(setup, error):
     # open file for error messages
-    sys.stderr = file(error, 'a')
+    sys.stderr = open(error, 'a')
     # read settings for port forwarding
     for settings in parse(setup):
         thread.start_new_thread(server, settings)
@@ -33,7 +36,7 @@ def main(setup, error):
 
 def parse(setup):
     settings = list()
-    for line in file(setup):
+    for line in open(setup):
         # skip comment line
         if line.startswith('#'):
             continue
